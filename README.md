@@ -1,6 +1,6 @@
 # Raman peak fitter (top-fraction)
 
-Desktop-ready toolkit to detect Raman peaks from a two-column TXT export (shift, intensity), fit only the top fraction of each peak (Lorentzian vs Voigt best pick), and export tables/plots. Includes CLI and a lightweight Streamlit UI.
+Desktop-ready toolkit to detect Raman peaks from a two-column TXT export (shift, intensity), fit only the top fraction of each peak (Lorentzian vs Voigt best pick), and export tables/plots. Includes CLI and a lightweight Streamlit UI. Supports Python 3.9+.
 
 ## Quickstart
 

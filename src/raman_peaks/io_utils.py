@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import io
 from pathlib import Path
-from typing import Iterable, Tuple
+from typing import Iterable, Tuple, Union
 
 import numpy as np
 
@@ -23,7 +23,7 @@ def _detect_delimiter(lines: Iterable[str]) -> str:
     return delim if counts[delim] > 0 else " "
 
 
-def load_spectrum_txt(path: str | Path) -> Tuple[np.ndarray, np.ndarray]:
+def load_spectrum_txt(path: Union[str, Path]) -> Tuple[np.ndarray, np.ndarray]:
     """Load a two-column Raman spectrum (shift, intensity) from txt.
 
     The function tries tab, comma, and space as delimiters and assumes

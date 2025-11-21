@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Optional
+
 import numpy as np
 from scipy.signal import medfilt, savgol_filter, find_peaks
 
@@ -12,7 +14,7 @@ class PreprocessConfig:
     smoothing_window: int = 11
     smoothing_poly: int = 3
     k_noise: float = 5.0  # min height = k_noise * sigma
-    min_distance_pts: int | None = None  # peak separation in points
+    min_distance_pts: Optional[int] = None  # peak separation in points
 
 
 def ensure_odd(n: int) -> int:

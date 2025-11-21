@@ -1,10 +1,8 @@
 """Command-line interface for Raman peak fitting."""
-from __future__ import annotations
-
 import argparse
 import csv
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from .analysis import AnalysisConfig, analyze_spectrum
 from .io_utils import load_spectrum_txt
@@ -20,7 +18,7 @@ def write_csv(peaks, path: Path):
             writer.writerow(row)
 
 
-def main(argv: List[str] | None = None):
+def main(argv: Optional[List[str]] = None):
     parser = argparse.ArgumentParser(description="Fit Raman peaks using top-fraction fitting.")
     parser.add_argument("input", help="Input TXT with two numeric columns (shift, intensity)")
     parser.add_argument("--top-fraction", type=float, default=0.2, help="Top fraction of peak height to fit (0-1)")

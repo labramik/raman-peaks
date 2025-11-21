@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Callable, Dict, List, Tuple
+from typing import Callable, Dict, List, Optional, Tuple
 
 import numpy as np
 from scipy.optimize import curve_fit
@@ -85,7 +85,7 @@ def _fit_model(
     center_guess: float,
     height_guess: float,
     width_guess: float,
-) -> Tuple[PeakFit | None, np.ndarray]:
+) -> Tuple[Optional[PeakFit], np.ndarray]:
     func = MODEL_FUNCS[model]
     try:
         if model == "lorentzian":
@@ -121,7 +121,7 @@ def fit_peak(
     center_guess: float,
     window: float,
     top_fraction: float,
-) -> PeakFit | None:
+) -> Optional[PeakFit]:
     """Fit a single peak around a seed center using top fraction of data."""
     if len(x) < 5:
         return None

@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Sequence
+from typing import List, Optional, Sequence
 
 import numpy as np
 from scipy.signal import find_peaks
@@ -24,11 +24,11 @@ class AnalysisConfig:
     smoothing_window: int = 11
     smoothing_poly: int = 3
     peak_window: float = 30.0  # window width in x units around each peak
-    min_distance_pts: int | None = None
+    min_distance_pts: Optional[int] = None
     enable_shoulders: bool = True
     shoulder_height_ratio: float = 0.5  # vs main threshold
     shoulder_prominence_ratio: float = 0.3
-    shoulder_distance: float | None = None  # in x units
+    shoulder_distance: Optional[float] = None  # in x units
     dedup_distance_factor: float = 0.5  # scaling for dedup distance to allow close shoulders
 
 
@@ -41,7 +41,7 @@ class AnalysisResult:
     noise_sigma: float
     peaks: List[PeakFit]
 
-    def reconstructed(self, x_grid: np.ndarray | None = None) -> np.ndarray:
+    def reconstructed(self, x_grid: Optional[np.ndarray] = None) -> np.ndarray:
         x_eval = x_grid if x_grid is not None else self.x
         total = np.zeros_like(x_eval, dtype=float)
         for peak in self.peaks:
