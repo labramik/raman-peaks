@@ -6,9 +6,9 @@ import io
 
 import streamlit as st
 
-from .analysis import AnalysisConfig, analyze_spectrum
-from .io_utils import load_spectrum_from_string
-from .plotting import build_peak_table, plot_analysis, save_plot_bytes
+from raman_peaks.analysis import AnalysisConfig, analyze_spectrum
+from raman_peaks.io_utils import load_spectrum_from_string
+from raman_peaks.plotting import build_peak_table, plot_analysis, save_plot_bytes
 
 
 def _peaks_to_csv(peaks) -> bytes:
