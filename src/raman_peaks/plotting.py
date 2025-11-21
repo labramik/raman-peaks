@@ -12,6 +12,7 @@ from .fitting import PeakFit
 
 
 def build_peak_table(peaks: List[PeakFit]) -> List[dict]:
+    """Convert PeakFit objects to serializable dicts."""
     table = []
     for p in peaks:
         row = {
@@ -27,6 +28,7 @@ def build_peak_table(peaks: List[PeakFit]) -> List[dict]:
 
 
 def plot_analysis(result: AnalysisResult, show_baseline: bool = True):
+    """Plot spectrum, baseline, fit, and markers for fitted peaks."""
     fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(result.x, result.y, label="spectrum", color="C0", lw=1.2)
 
@@ -41,7 +43,14 @@ def plot_analysis(result: AnalysisResult, show_baseline: bool = True):
         heights = [b + p.amplitude for b, p in zip(base_at_centers, result.peaks)]
         ax.scatter(centers, heights, color="C1", s=30, zorder=5, label="fitted peaks")
         for p, h in zip(result.peaks, heights):
-            ax.annotate(f"{p.center:.1f}", xy=(p.center, h), xytext=(0, 6), textcoords="offset points", ha="center", fontsize=8)
+            ax.annotate(
+                f"{p.center:.1f}",
+                xy=(p.center, h),
+                xytext=(0, 6),
+                textcoords="offset points",
+                ha="center",
+                fontsize=8,
+            )
 
     ax.set_xlabel("Raman shift (cm$^{-1}$)")
     ax.set_ylabel("Intensity (a.u.)")
@@ -53,6 +62,7 @@ def plot_analysis(result: AnalysisResult, show_baseline: bool = True):
 
 
 def save_plot_bytes(fig) -> bytes:
+    """Return PNG bytes for a Matplotlib figure."""
     buf = io.BytesIO()
     fig.savefig(buf, format="png", dpi=150)
     buf.seek(0)

@@ -45,7 +45,7 @@ def load_spectrum_txt(path: Union[str, Path]) -> Tuple[np.ndarray, np.ndarray]:
 
     try:
         data = np.loadtxt(path, delimiter=delim, ndmin=2)
-    except Exception:
+    except (OSError, ValueError):
         # try whitespace as final fallback
         data = np.loadtxt(path, ndmin=2)
 
@@ -65,7 +65,7 @@ def load_spectrum_from_string(text: str) -> Tuple[np.ndarray, np.ndarray]:
     buffer = io.StringIO(text)
     try:
         data = np.loadtxt(buffer, delimiter=delim, ndmin=2)
-    except Exception:
+    except (OSError, ValueError):
         buffer.seek(0)
         data = np.loadtxt(buffer, ndmin=2)
 

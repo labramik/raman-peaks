@@ -17,7 +17,8 @@ from .preprocessing import (
 
 
 @dataclass
-class AnalysisConfig:
+class AnalysisConfig:  # pylint: disable=too-many-instance-attributes
+    """Configuration for Raman spectrum analysis and fitting."""
     top_fraction: float = 0.2
     k_noise: float = 5.0
     baseline_window: int = 51
@@ -34,6 +35,7 @@ class AnalysisConfig:
 
 @dataclass
 class AnalysisResult:
+    """Container for analysis outputs and reconstruction helper."""
     x: np.ndarray
     y: np.ndarray
     baseline: np.ndarray
@@ -42,6 +44,7 @@ class AnalysisResult:
     peaks: List[PeakFit]
 
     def reconstructed(self, x_grid: Optional[np.ndarray] = None) -> np.ndarray:
+        """Rebuild spectrum from baseline + fitted peaks on a chosen grid."""
         x_eval = x_grid if x_grid is not None else self.x
         total = np.zeros_like(x_eval, dtype=float)
         for peak in self.peaks:
@@ -53,6 +56,7 @@ class AnalysisResult:
 
 
 def _deduplicate_peaks(peaks: List[PeakFit], min_distance: float) -> List[PeakFit]:
+    """Remove overlapping peaks, keeping the better-scoring one."""
     if not peaks:
         return []
     peaks_sorted = sorted(peaks, key=lambda p: p.center)
@@ -75,7 +79,7 @@ def detect_shoulders(
     config: AnalysisConfig,
 ) -> np.ndarray:
     """Find shoulder candidates near main peaks using a relaxed threshold."""
-    if not len(main_idxs):
+    if main_idxs.size == 0:
         return np.array([], dtype=int)
 
     min_height = max(noise_sigma * config.k_noise * config.shoulder_height_ratio, noise_sigma * 0.5)
@@ -90,12 +94,17 @@ def detect_shoulders(
     )
 
     main_pos = x[main_idxs]
-    shoulder_dist = config.shoulder_distance if config.shoulder_distance is not None else config.peak_window * 0.6
+    shoulder_dist = (
+        config.shoulder_distance
+        if config.shoulder_distance is not None
+        else config.peak_window * 0.6
+    )
 
     shoulder_idxs: list[int] = []
     for idx in candidates:
         pos = x[idx]
-        if np.min(np.abs(pos - main_pos)) <= shoulder_dist and idx not in main_idxs:
+        close_to_main = np.min(np.abs(pos - main_pos)) <= shoulder_dist
+        if close_to_main and idx not in main_idxs:
             shoulder_idxs.append(int(idx))
     return np.array(shoulder_idxs, dtype=int)
 
@@ -105,6 +114,8 @@ def analyze_spectrum(
     y: Sequence[float],
     config: AnalysisConfig,
 ) -> AnalysisResult:
+    """Run full preprocessing, detection, and top-fraction fitting."""
+    # pylint: disable=too-many-locals
     x_arr = np.asarray(x, dtype=float)
     y_arr = np.asarray(y, dtype=float)
 
