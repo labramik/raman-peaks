@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "github": {
+      "enabled": true
+    },
+    "context7": {
+      "enabled": true
+    },
+    "ref": {
+      "enabled": true
+    },
+    "exa": {
+      "enabled": true
+    },
+    "ref_plan": {
+      "enabled": false
+    },
+    "magic_patterns": {
+      "enabled": false
+    }
+  }
+}
